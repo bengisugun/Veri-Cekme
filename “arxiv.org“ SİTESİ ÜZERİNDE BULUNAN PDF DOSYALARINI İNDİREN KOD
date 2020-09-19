@@ -1,0 +1,22 @@
+import mechanize
+import urllib.request
+def pdf_indir(link):
+    browser = mechanize.Browser()
+    browser.set_handle_equiv(False)
+    browser.set_handle_robots(False)
+    browser.open(link)
+    sayac = 0
+
+    for link in browser.links():
+
+        if "pdf" in link.url:
+            adres = str(link.url)
+            adres = adres.replace("https://arxiv.org/"," ");
+            adres = adres.replace("/", " ");
+            data = urllib.request.urlretrieve(link.url,"D:\\"+str(adres)+".pdf")
+            print("Datamız:", data)
+            sayac = sayac + 1
+
+for i in range(0,1200,200): #Pdf sayılarına göre değişkenlik gösterebilir.
+
+    pdf_indir("https://arxiv.org/search/?query=Computer+Science&searchtype=all&source=header&order=-announced_date_first&size=200&abstracts=show&start=0"+str(i)) 
