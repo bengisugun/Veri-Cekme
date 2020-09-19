@@ -1,0 +1,29 @@
+import requests
+from bs4 import BeautifulSoup
+from lxml import html
+m = 1
+for i in range(1):
+url = "https://www.hepsiburada.com/ara?q=casper%20diz%C3%BCst%C3%BC
+%20bilgisayar&filtreler=fiyat:1000-2500&markalar=casper"
+sayfa = requests.get(url)
+icerik = sayfa.content
+soup = BeautifulSoup(icerik, 'lxml')
+deneme = html.fromstring(sayfa.text)
+fotograf = deneme.xpath("//div[@class='carousel-lazy-item']//img/@src")
+yorum = soup.findAll('span', attrs={'class': 'number-of-reviews'})
+isimlerHepsi = soup.findAll('p', attrs={'class': 'hb-pl-cn'})
+fiyat = soup.findAll('div', attrs={'class': 'price-value'})
+for j in range(len(fotograf)):
+response = requests.get(fotograf[j])
+file = open("sample_image" + str(j) + ".png", "wb")
+file.write(response.content)
+file.close()
+m=0
+for j in range(len(fiyat)):
+print("-------------ÜRÜN--------------")
+print("Ürün=" + isimlerHepsi[j].text.strip())
+print("Fiyat=" + fiyat[j].text.strip())
+print("Yorum" + yorum[j].text.strip())
+for m in range(m+3):
+print("Fotograflar=" + fotograf[m])
+m=m+3
